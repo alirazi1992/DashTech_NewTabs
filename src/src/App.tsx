@@ -19,6 +19,7 @@ import { SettingsProfile } from "./pages/SettingsProfile";
 import { SettingsSecurity } from "./pages/SettingsSecurity";
 import { Messenger } from "./pages/Messenger";
 import FastPass from "./pages/FastPass";
+import TechnicianWorkspace from "./pages/TechnicianWorkspace";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -28,15 +29,11 @@ interface PrivateRouteProps {
 function PrivateRoute({ children, roles }: PrivateRouteProps) {
   const { isAuthenticated, user } = useAuth();
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !user) {
     return <Navigate to="/login" replace />;
   }
 
   if (roles) {
-    if (!user) {
-      return null;
-    }
-
     if (!roles.includes(user.role)) {
       return <Navigate to={getHomePathForRole(user.role)} replace />;
     }
@@ -92,6 +89,14 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/workspace"
+        element={
+          <PrivateRoute roles={["technician", "admin"]}>
+            <TechnicianWorkspace />
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="/dashboard/client"
         element={
           <PrivateRoute roles={["client"]}>
@@ -104,7 +109,7 @@ function AppRoutes() {
       <Route
         path="/projects"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "technician"]}>
             <Projects />
           </PrivateRoute>
         }
@@ -112,7 +117,7 @@ function AppRoutes() {
       <Route
         path="/projects/:id"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "technician"]}>
             <ProjectDetail />
           </PrivateRoute>
         }

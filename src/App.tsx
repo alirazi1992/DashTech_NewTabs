@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import {
   AuthProvider,
@@ -20,6 +20,7 @@ import { SettingsProfile } from "./src/pages/SettingsProfile";
 import { SettingsSecurity } from "./src/pages/SettingsSecurity";
 import { TechnicianCalendar } from "./src/pages/TechnicianCalendar"; // ✅ technician calendar
 import { Messenger } from "./src/pages/Messenger";
+import TechnicianWorkspace from "./src/pages/TechnicianWorkspace";
 
 import FastPass from "./src/pages/FastPass";
 
@@ -37,7 +38,7 @@ function PrivateRoute({ children, roles }: PrivateRouteProps) {
 
   if (roles) {
     if (!user) {
-      return null;
+      return <Navigate to="/login" replace />;
     }
 
     if (!roles.includes(user.role)) {
@@ -91,6 +92,14 @@ function AppRoutes() {
         element={
           <PrivateRoute roles={["technician"]}>
             <TechnicianDashboard />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/workspace"
+        element={
+          <PrivateRoute roles={["technician", "admin"]}>
+            <TechnicianWorkspace />
           </PrivateRoute>
         }
       />

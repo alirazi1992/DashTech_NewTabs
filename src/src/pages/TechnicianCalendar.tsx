@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
@@ -181,6 +181,14 @@ type ReportQueueItem = {
 };
 
 type DashboardHeaderTab = "general" | "teamCalendar" | "workbench";
+
+const parseHeaderTab = (tabParam: string | null): DashboardHeaderTab => {
+  if (tabParam === "teamCalendar" || tabParam === "workbench") {
+    return tabParam;
+  }
+
+  return "general";
+};
 
 // ------------------ Data ------------------
 const todayMetrics: Metric[] = [
@@ -591,7 +599,10 @@ const formatPersianDate = (dateString: string, pattern = "dddd D MMMM") =>
 // ------------------ View ------------------
 function TechnicianDashboardView() {
   const navigate = useNavigate();
-  const [headerTab, setHeaderTab] = useState<DashboardHeaderTab>("general");
+  const [searchParams] = useSearchParams();
+  const [headerTab, setHeaderTab] = useState<DashboardHeaderTab>(
+    parseHeaderTab(searchParams.get("tab"))
+  );
   const [timeRange, setTimeRange] = useState<TimeRange>("today");
   const [calendarValue, setCalendarValue] = useState<DateObject | null>(
     initialCollabCalendarEvents[0]
@@ -620,6 +631,10 @@ function TechnicianDashboardView() {
     activeWorkbench && activeFeature
       ? workbenchFeatureDetails[activeWorkbench]?.[activeFeature]
       : undefined;
+
+  useEffect(() => {
+    setHeaderTab(parseHeaderTab(searchParams.get("tab")));
+  }, [searchParams]);
 
   const showMessage = (message: string) => {
     setStatusMessage(message);
@@ -685,12 +700,6 @@ function TechnicianDashboardView() {
 
   const availableTechnicians = mockAvatars.slice(0, 5);
 
-  const headerTabs: { id: DashboardHeaderTab; label: string }[] = [
-    { id: "general", label: "عمومی" },
-    { id: "teamCalendar", label: "تقویم تیمی" },
-    { id: "workbench", label: "میزکار" },
-  ];
-
   return (
     <AppShell>
       <div className="max-w-7xl mx-auto space-y-6 text-right">
@@ -707,9 +716,9 @@ function TechnicianDashboardView() {
             <Button
               variant="ghost"
               className="px-4 py-2 text-sm text-gray-700"
-              onClick={() => navigate("/" + "workspace")}
+              onClick={() => navigate("/workspace", { state: { anchor: "desk" } })}
             >
-              <Icon name="layout" size={16} className="ml-2" />
+              <Icon name="layers" size={16} className="ml-2" />
               بازگشت به مرور پروژه‌ها
             </Button>
             <Button variant="primary" className="px-5 py-2 text-sm">
@@ -718,19 +727,6 @@ function TechnicianDashboardView() {
             </Button>
           </div>
         </header>
-
-        <div className="flex items-center gap-2 flex-row">
-          {headerTabs.map((tab) => (
-            <Button
-              key={tab.id}
-              variant={headerTab === tab.id ? "primary" : "ghost"}
-              className="text-sm"
-              onClick={() => setHeaderTab(tab.id)}
-            >
-              {tab.label}
-            </Button>
-          ))}
-        </div>
 
         {statusMessage && (
           <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 flex items-center justify-between flex-row">

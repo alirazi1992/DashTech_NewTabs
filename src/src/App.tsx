@@ -19,6 +19,7 @@ import { SettingsProfile } from "./pages/SettingsProfile";
 import { SettingsSecurity } from "./pages/SettingsSecurity";
 import { Messenger } from "./pages/Messenger";
 import FastPass from "./pages/FastPass";
+import TechnicianWorkspace from "./pages/TechnicianWorkspace";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -92,6 +93,14 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/workspace"
+        element={
+          <PrivateRoute roles={["technician"]}>
+            <TechnicianWorkspace />
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="/dashboard/client"
         element={
           <PrivateRoute roles={["client"]}>
@@ -104,7 +113,7 @@ function AppRoutes() {
       <Route
         path="/projects"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "technician"]}>
             <Projects />
           </PrivateRoute>
         }
@@ -112,7 +121,7 @@ function AppRoutes() {
       <Route
         path="/projects/:id"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "technician"]}>
             <ProjectDetail />
           </PrivateRoute>
         }

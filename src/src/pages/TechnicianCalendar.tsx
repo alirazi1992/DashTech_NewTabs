@@ -716,9 +716,9 @@ function TechnicianDashboardView() {
             <Button
               variant="ghost"
               className="px-4 py-2 text-sm text-gray-700"
-              onClick={() => navigate("/" + "workspace")}
+              onClick={() => navigate("/workspace")}
             >
-              <Icon name="layout" size={16} className="ml-2" />
+              <Icon name="layers" size={16} className="ml-2" />
               بازگشت به مرور پروژه‌ها
             </Button>
             <Button variant="primary" className="px-5 py-2 text-sm">

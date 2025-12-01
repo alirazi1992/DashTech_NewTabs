@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AppShell } from "../components/layout/AppShell";
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
@@ -109,6 +110,37 @@ const signatureQueue = [
 
 export function TechnicianWorkspace() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const anchorFromState =
+      typeof location.state === "object" && location.state !== null
+        ? (location.state as { anchor?: string }).anchor
+        : undefined;
+
+    const anchor = (location.hash || "").replace("#", "") || anchorFromState;
+    if (!anchor) return;
+
+    const scrollToAnchor = () => {
+      const target =
+        document.getElementById(anchor) ||
+        document.getElementById(`workspace-${anchor}`);
+
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        return true;
+      }
+
+      return false;
+    };
+
+    if (!scrollToAnchor()) {
+      const timer = window.setTimeout(scrollToAnchor, 350);
+      return () => window.clearTimeout(timer);
+    }
+
+    return undefined;
+  }, [location.hash, location.state]);
 
   return (
     <AppShell>

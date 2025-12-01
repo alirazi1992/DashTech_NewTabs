@@ -29,15 +29,11 @@ interface PrivateRouteProps {
 function PrivateRoute({ children, roles }: PrivateRouteProps) {
   const { isAuthenticated, user } = useAuth();
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !user) {
     return <Navigate to="/login" replace />;
   }
 
   if (roles) {
-    if (!user) {
-      return null;
-    }
-
     if (!roles.includes(user.role)) {
       return <Navigate to={getHomePathForRole(user.role)} replace />;
     }

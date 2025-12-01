@@ -44,9 +44,14 @@ export function Topbar({
       path: "/dashboard/technician",
     },
     {
-      id: "technician-calendar",
-      label: "تقویم فنی",
-      path: "/technician-calendar",
+      id: "technician-team-calendar",
+      label: "تقویم تیمی",
+      path: "/technician-calendar?tab=teamCalendar",
+    },
+    {
+      id: "technician-workbench",
+      label: "میز کار",
+      path: "/technician-calendar?tab=workbench",
     },
     {
       id: "technician-messenger",

@@ -95,7 +95,7 @@ function AppRoutes() {
       <Route
         path="/workspace"
         element={
-          <PrivateRoute roles={["technician"]}>
+          <PrivateRoute roles={["technician", "admin"]}>
             <TechnicianWorkspace />
           </PrivateRoute>
         }

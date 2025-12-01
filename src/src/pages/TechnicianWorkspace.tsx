@@ -112,7 +112,7 @@ export function TechnicianWorkspace() {
 
   return (
     <AppShell>
-      <div className="max-w-7xl mx-auto space-y-6 text-right">
+      <div className="max-w-7xl mx-auto space-y-6 text-right" id="desk">
         <header className="flex flex-wrap items-start justify-between gap-4 flex-row">
           <div className="space-y-1">
             <p className="text-sm uppercase tracking-[0.3em] text-gray-500">میز مرور پروژه‌ها</p>
@@ -137,9 +137,9 @@ export function TechnicianWorkspace() {
           </div>
         </header>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4" aria-label="شاخص‌های هم‌راستایی AsiaClass">
           {["۳ پروژه فعال", "۵۵ سند فنی", "۴ مهر دیجیتال", "هم‌راستایی با AsiaClass"].map((item, index) => (
-            <Card key={item} className="p-4 border border-gray-100 bg-white">
+            <Card key={item} className="p-4 border border-gray-100 bg-white" role="article">
               <div className="flex items-center justify-between flex-row">
                 <span className="text-sm text-gray-500">شاخص {index + 1}</span>
                 <Icon name="check" size={16} className="text-emerald-600" />
@@ -148,9 +148,13 @@ export function TechnicianWorkspace() {
               <p className="text-xs text-gray-500 mt-1">آپدیت اتوماتیک با داده‌های AsiaClass</p>
             </Card>
           ))}
-        </div>
+        </section>
 
-        <Card className="p-5 border border-gray-100 bg-white">
+        <Card
+          className="p-5 border border-gray-100 bg-white"
+          id="workspace-desk"
+          aria-label="میز پروژه‌های قابل اقدام"
+        >
           <div className="flex items-center justify-between mb-4 flex-row">
             <div>
               <h2 className="text-lg font-semibold text-gray-900">میز پروژه‌های فعال</h2>
@@ -172,16 +176,16 @@ export function TechnicianWorkspace() {
                 <h3 className="text-lg font-semibold text-gray-900">{project.title}</h3>
                 <p className="text-sm text-gray-600">مسئول: {project.owner} · منطقه: {project.region}</p>
 
+                <div className="flex items-center justify-between text-xs text-gray-600 flex-row">
+                  <span>مهرهای صادرشده: {project.stamps}</span>
+                  <span className="text-emerald-700">همسو با AsiaClass</span>
+                </div>
+
                 <div className="grid grid-cols-2 gap-2 text-sm text-gray-700">
                   <span className="px-2 py-1 rounded-lg bg-white border border-gray-200">{project.docs.ready}/{project.docs.total} سند آماده</span>
                   <span className="px-2 py-1 rounded-lg bg-white border border-gray-200">{project.review}</span>
                   <span className="px-2 py-1 rounded-lg bg-white border border-gray-200">{project.approval}</span>
                   <span className="px-2 py-1 rounded-lg bg-white border border-gray-200">{project.signature}</span>
-                </div>
-
-                <div className="flex items-center justify-between text-xs text-gray-600 flex-row">
-                  <span>مهرهای صادرشده: {project.stamps}</span>
-                  <span className="text-emerald-700">همسو با AsiaClass</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
